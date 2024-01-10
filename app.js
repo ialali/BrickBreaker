@@ -2,6 +2,7 @@ const grid = document.querySelector('.grid')
 const scoreDisplay = document.querySelector('#score')
 const pauseButton = document.querySelector('#pause')
 const restartButton = document.querySelector('#restart')
+
 const blockWidth = 110
 const blockHeight = 30
 const blockMargin = 5
@@ -12,6 +13,7 @@ const boardWidth = 1380
 const boardHeight = 800
 let xDirection = -3
 let yDirection = 3
+let lives = 3;
 
 const userStart = [775 - 200, 10]
 let currentPosition = userStart
@@ -139,6 +141,12 @@ function animate() {
 }
 animate();
 
+function updateLivesDisplay() {
+    // Update the lives display
+    document.querySelector('#lives').innerHTML = `LIVES: ${lives}`;
+
+}
+
 //check for collisions
 function checkForCollisions() {
     //check for block collision
@@ -164,6 +172,10 @@ function checkForCollisions() {
     if (ballCurrentPosition[0] >= (boardWidth - ballDiameter) || ballCurrentPosition[0] <= 0 || ballCurrentPosition[1] >= (boardHeight - ballDiameter)) {
         changeDirection()
     }
+    // check for collision with top of board
+    if (ballCurrentPosition[1] <= 0 && lives > 0) {
+        changeDirection();
+    }
 
     //check for user collision
     if
@@ -175,35 +187,57 @@ function checkForCollisions() {
     }
 
     //game over
+    //game over
     if (ballCurrentPosition[1] <= 0) {
-        isGameOver = true;
+        if (!lifeLost && lives > 0) {
+            lives--;
+            lifeLost = true; // set the flag to true when a life is lost
+            updateLivesDisplay();
+            
+        }
+        if (lives === 0) {
+            isGameOver = true;
+            // Stop the game loop and remove the event listener only when the game is over
+            cancelAnimationFrame(animationId);
+            document.removeEventListener('keydown', moveUser);
+            return;
+        }
+    }
 
+    // reset the flag once the ball has moved away from the top of the board
+    if (ballCurrentPosition[1] > 0) {
+        lifeLost = false;
+    }
+
+    // Other game logic here...
+
+    // Only cancel the animation frame and remove the event listener if the game is over
+    if (isGameOver) {
         cancelAnimationFrame(animationId);
-
-        document.removeEventListener('keydown', moveUser)
-        return
+        document.removeEventListener('keydown', moveUser);
+        return;
     }
 }
 
 
 function changeDirection() {
     if (xDirection === 3 && yDirection === 3) {
-        yDirection = -3
-        return
+      yDirection = -3
+      return
     }
     if (xDirection === 3 && yDirection === -3) {
-        xDirection = -3
-        return
+      xDirection = -3
+      return
     }
     if (xDirection === -3 && yDirection === -3) {
-        yDirection = 3
-        return
+      yDirection = 3
+      return
     }
     if (xDirection === -3 && yDirection === 3) {
-        xDirection = 3
-        return
+      xDirection = 3
+      return
     }
-}
+  }
 
 
 pauseButton.addEventListener('click', function () {
