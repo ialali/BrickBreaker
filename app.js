@@ -127,7 +127,6 @@ function animate() {
 
     lastFrameTime = currentFrameTime;
     moveBall();
-    checkForCollisions();
 
     // If the game is paused, return early
     if (isGamePaused) {
