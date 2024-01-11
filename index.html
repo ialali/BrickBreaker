@@ -1,27 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nabla&family=Nunito:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nabla&family=Nunito:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Nabla&family=Nunito:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <title>Breakout</title>
 </head>
+
 <body>
     <nav>
         <div class="score" id="score">SCORE:</div>
-        <div class="lives" id="lives">Lives: 3</div>
+        <div class="lives" id="lives">
+            <div class="lives" id="lives">
+                <span class="heart"><i class='bx bxs-heart'></i></span>
+                <span class="heart"><i class='bx bxs-heart'></i></span>
+                <span class="heart"><i class='bx bxs-heart'></i></span>
+            </div>
+        </div>
         <div class="timer" id="timer"></div>
         <div class="pause">
-            <button class="pause" id="pause">PAUSE</button>
-            <button class="restart" id="restart">RESTART</button>
+            <button class="pause" id="resume"><i class='bx bx-play'></i></button>
+            <button class="pause" id="pause"><i class='bx bx-pause'></i></button>
+            <button class="restart" id="restart"><i class='bx bx-repeat'></i></button>
         </div>
     </nav>
     <div class="grid"></div>
-    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2>GAME OVER</h2>
+            <button class="restart" id="restartButton"><i class='bx bx-repeat'></i></button>
+        </div>
+    </div>
+
 
 
 
 
     <script src="app.js"></script>
 </body>
+
 </html>

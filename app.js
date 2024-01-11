@@ -1,7 +1,9 @@
 const grid = document.querySelector('.grid')
 const scoreDisplay = document.querySelector('#score')
-const pauseButton = document.querySelector('#pause')
+const pauseButton = document.getElementById('pause')
 const restartButton = document.querySelector('#restart')
+const resumeButton = document.getElementById('resume')
+
 
 const blockWidth = 110
 const blockHeight = 30
@@ -140,10 +142,16 @@ function animate() {
 }
 animate();
 
-function updateLivesDisplay() {
-    // Update the lives display
-    document.querySelector('#lives').innerHTML = `LIVES: ${lives}`;
+// function updateLivesDisplay() {
+//     // Update the lives display
+//     document.querySelector('#lives').innerHTML = `LIVES: ${lives}`;
 
+// }
+function loseLife() {
+    const hearts = document.querySelectorAll('.heart');
+    if (hearts.length > 0) {
+        hearts[hearts.length - 1].remove(); // Remove the last heart
+    }
 }
 
 //check for collisions
@@ -191,14 +199,21 @@ function checkForCollisions() {
         if (!lifeLost && lives > 0) {
             lives--;
             lifeLost = true; // set the flag to true when a life is lost
-            updateLivesDisplay();
-            
+            loseLife();
+
         }
         if (lives === 0) {
             isGameOver = true;
             // Stop the game loop and remove the event listener only when the game is over
             cancelAnimationFrame(animationId);
             document.removeEventListener('keydown', moveUser);
+            const gameOverModal = document.getElementById('gameOverModal');
+            gameOverModal.style.display = 'block';
+            const restartButton = document.getElementById('restartButton');
+            restartButton.addEventListener('click', function () {
+                location.reload();
+                // Add any other code needed to restart the game
+            });
             return;
         }
     }
@@ -221,34 +236,36 @@ function checkForCollisions() {
 
 function changeDirection() {
     if (xDirection === 3 && yDirection === 3) {
-      yDirection = -3
-      return
+        yDirection = -3
+        return
     }
     if (xDirection === 3 && yDirection === -3) {
-      xDirection = -3
-      return
+        xDirection = -3
+        return
     }
     if (xDirection === -3 && yDirection === -3) {
-      yDirection = 3
-      return
+        yDirection = 3
+        return
     }
     if (xDirection === -3 && yDirection === 3) {
-      xDirection = 3
-      return
+        xDirection = 3
+        return
     }
-  }
+}
 
 
 pauseButton.addEventListener('click', function () {
-    isGamePaused = !isGamePaused;
-    pauseButton.innerHTML = isGamePaused ? 'Resume' : 'Pause'; // Change the button text based on the game state
+    isGamePaused = true;
+    pauseButton.style.display = 'none'; // Hide the pause button
+    resumeButton.style.display = 'block'; // Show the resume button
+    cancelAnimationFrame(animationId);
+});
 
-    if (isGamePaused) {
-        cancelAnimationFrame(animationId);
-
-    } else {
-        animate(); // If the game is resumed, start the animate function again
-    }
+resumeButton.addEventListener('click', function () {
+    isGamePaused = false;
+    pauseButton.style.display = 'block'; // Show the pause button
+    resumeButton.style.display = 'none'; // Hide the resume button
+    animate(); // If the game is resumed, start the animate function again
 });
 restartButton.addEventListener('click', function () {
     // Refresh the window
