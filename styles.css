@@ -148,3 +148,9 @@ nav > * {
     color: red;
     font-size: 100px;
 }
+
+.timer {
+    color: white;
+    font-size: 30px;
+    font-family: 'Nabla', system-ui;
+}

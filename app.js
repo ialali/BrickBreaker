@@ -3,8 +3,11 @@ const scoreDisplay = document.querySelector('#score')
 const pauseButton = document.getElementById('pause')
 const restartButton = document.querySelector('#restart')
 const resumeButton = document.getElementById('resume')
+const timerDisplay = document.querySelector('.timer')
 
 
+let timer = 0;
+let timerInterval = null;
 const blockWidth = 110
 const blockHeight = 30
 const blockMargin = 5
@@ -16,6 +19,7 @@ const boardHeight = 800
 let xDirection = -3
 let yDirection = 3
 let lives = 3;
+let timerShouldIncrement = true;
 
 const userStart = [775 - 200, 10]
 let currentPosition = userStart
@@ -28,6 +32,31 @@ let lastFrameTime = performance.now();
 let animationId = null;
 let isGameOver = false;
 let isGamePaused = false;
+
+
+function startTimer() {
+    if (timerInterval !== null) {
+        return;
+    }
+
+    timerInterval = setInterval(() => {
+        timer++;
+        let minutes = Math.floor(timer / 60);
+        let seconds = timer % 60;
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }, 1000);
+}
+
+function pauseTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
+
+function resumeTimer() {
+    if (timerInterval === null) {
+        startTimer();
+    }
+}
 
 //my block
 class Block {
@@ -128,6 +157,7 @@ function animate() {
     console.log(`FPS: ${fps}`);
 
     lastFrameTime = currentFrameTime;
+    startTimer();
     moveBall();
 
     // If the game is paused, return early
@@ -206,6 +236,7 @@ function checkForCollisions() {
             isGameOver = true;
             // Stop the game loop and remove the event listener only when the game is over
             cancelAnimationFrame(animationId);
+            pauseTimer();
             document.removeEventListener('keydown', moveUser);
             const gameOverModal = document.getElementById('gameOverModal');
             gameOverModal.style.display = 'block';
@@ -256,6 +287,7 @@ function changeDirection() {
 
 pauseButton.addEventListener('click', function () {
     isGamePaused = true;
+    pauseTimer();
     pauseButton.style.display = 'none'; // Hide the pause button
     resumeButton.style.display = 'block'; // Show the resume button
     cancelAnimationFrame(animationId);
@@ -263,6 +295,7 @@ pauseButton.addEventListener('click', function () {
 
 resumeButton.addEventListener('click', function () {
     isGamePaused = false;
+    resumeTimer();
     pauseButton.style.display = 'block'; // Show the pause button
     resumeButton.style.display = 'none'; // Hide the resume button
     animate(); // If the game is resumed, start the animate function again
